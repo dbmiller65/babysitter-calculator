@@ -57,7 +57,11 @@ export default function ParallaxScrollView({
             { backgroundColor: headerBackgroundColor[colorScheme] },
             headerAnimatedStyle,
           ]}>
-          {headerImage}
+          {/* Use hero.png as the header image */}
+          <Animated.Image
+            source={require('../assets/hero.png')}
+            style={{ width: '100%', height: '100%', resizeMode: 'contain' }}
+          />
         </Animated.View>
         <ThemedView style={styles.content}>{children}</ThemedView>
       </Animated.ScrollView>

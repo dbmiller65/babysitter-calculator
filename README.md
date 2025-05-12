@@ -1,6 +1,19 @@
-# Welcome to your Expo app 👋
+# Babysitter Calculator
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+A simple cross-platform (iOS/Android) app to help parents and babysitters quickly calculate babysitting fees.
+
+## Features
+- Enter start and stop times for a babysitting session
+- Enter hourly rate
+- Instantly calculates total pay based on hours worked
+
+## Getting Started
+1. Run `npm start` or `npx expo start` in this directory
+2. Use your phone or emulator to test the app on iOS, Android, or web
+
+---
+
+This project was bootstrapped with [Create Expo App](https://github.com/expo/create-expo-app).
 
 ## Get started
 

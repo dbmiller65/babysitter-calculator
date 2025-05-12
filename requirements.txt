@@ -1,0 +1,34 @@
+# Babysitter Calculator - Functional & UI Requirements
+
+## Functional Requirements
+- Each row allows entry of a start and stop time
+- Users can add extra rows as needed (multiple babysitting sessions)
+- Each row can be associated with its own hourly rate
+- There is a field at the bottom for entering gas money or a tip
+- Users can save babysitter names and their associated rates for future use
+- Users can manage a list of babysitter names, each with a default rate
+- When entering rows for a given babysitter, their default rate is auto-populated (but can be changed per row)
+
+## UI/UX Requirements
+- The app should have a fun look & feel (colorful, playful, friendly design)
+- Start/stop time placeholder text should be a little darker for better visibility
+- Gas/tip placeholder text should be a little darker for better visibility
+- Sums (totals) should be right-justified like an Excel table
+- When the user clicks into a start/stop field, a standard HH:MM AM/PM time picker interface should appear
+- The time picker should appear just above the row/card where the user tapped (not at the top of the screen)
+- When user clicks into a time field, the HH/MM/AM/PM picker should persist until the user explicitly submits their answer (not disappear after each selection)
+- When user clicks a time field, the screen must autoscroll so the time picker is at the top of the screen (and the corresponding card is just below it)
+- The spinner (time picker) shall always be visible on its Set/Cancel card (never hidden or occluded), and its font/background must ensure the time is always visible and readable (never white-on-white or otherwise invisible)
+- The stop time must be later than the begin time. The app must not allow negative or overnight hour calculations unless explicitly intended.
+- There must be a Manage Babysitter page, accessible via an icon at the bottom of the app.
+- The user must be able to add, modify, and delete babysitters, with fields: First Name, Last Name, Mobile, and Rate.
+- On the home page, the user must select a babysitter before filling in times.
+- When a babysitter is selected, their default rate should auto-fill all rate fields (but remain user-editable).
+- The hero/splash image must use the user-supplied hero.png (not the default atomic/react logo)
+- Move the hand wave emoji to the left side of the header so it fits on screen
+- The gas/tip input should be presented in a card similar to the start/stop/rate rows for visual consistency
+
+- The app must not display any persistent or confusing errors (e.g., 'VirtualizedLists should never be nested'). All such errors should be fixed or suppressed for a clean user experience.
+
+## Technical (for reference)
+- Built with Expo, React, and React Native
