@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, TextInput, TouchableOpacity, FlatList, StyleSheet, Platform, KeyboardAvoidingView, Linking } from 'react-native';
+import { View, TextInput, TouchableOpacity, FlatList, StyleSheet, Platform, KeyboardAvoidingView, Linking, Modal, Text } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Image } from 'expo-image';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
@@ -25,6 +25,8 @@ export default function BabysitterManagerScreen() {
   const [newRate, setNewRate] = useState('');
   const [editId, setEditId] = useState<string | null>(null);
   const [editFields, setEditFields] = useState<Partial<Babysitter>>({});
+  const [deleteConfirmation, setDeleteConfirmation] = useState<string | null>(null);
+  const [babysitterToDelete, setBabysitterToDelete] = useState<Babysitter | null>(null);
 
   // Load babysitters from storage on mount
   useEffect(() => {
@@ -76,8 +78,20 @@ export default function BabysitterManagerScreen() {
     setNewRate('');
   };
 
+  const confirmDelete = (babysitter: Babysitter) => {
+    setBabysitterToDelete(babysitter);
+    setDeleteConfirmation(`Are you sure you want to delete ${babysitter.firstName} ${babysitter.lastName}?`);
+  };
+
   const removeBabysitter = (id: string) => {
     setBabysitters(prev => prev.filter(b => b.id !== id));
+    setDeleteConfirmation(null);
+    setBabysitterToDelete(null);
+  };
+
+  const cancelDelete = () => {
+    setDeleteConfirmation(null);
+    setBabysitterToDelete(null);
   };
 
   const startEdit = (babysitter: Babysitter) => {
@@ -184,7 +198,7 @@ export default function BabysitterManagerScreen() {
           <TouchableOpacity onPress={() => startEdit(item)} style={[styles.button, styles.editButton]}>
             <ThemedText style={{ color: '#8B2D8B' }}>Edit</ThemedText>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => removeBabysitter(item.id)} style={[styles.button, styles.deleteButton]}>
+          <TouchableOpacity onPress={() => confirmDelete(item)} style={[styles.button, styles.deleteButton]}>
             <ThemedText style={{ color: '#fff' }}>Delete</ThemedText>
           </TouchableOpacity>
         </View>
@@ -193,7 +207,36 @@ export default function BabysitterManagerScreen() {
   };
 
   return (
-    <ParallaxScrollView
+    <>
+      {/* Delete Confirmation Modal */}
+      <Modal
+        visible={deleteConfirmation !== null}
+        transparent={true}
+        animationType="fade"
+      >
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContent}>
+            <ThemedText style={styles.modalTitle}>Confirm Delete</ThemedText>
+            <ThemedText style={styles.modalText}>{deleteConfirmation}</ThemedText>
+            <View style={styles.modalButtons}>
+              <TouchableOpacity 
+                style={[styles.button, styles.cancelButton]}
+                onPress={cancelDelete}
+              >
+                <ThemedText style={{ color: '#8B2D8B' }}>Cancel</ThemedText>
+              </TouchableOpacity>
+              <TouchableOpacity 
+                style={[styles.button, styles.deleteButton]}
+                onPress={() => babysitterToDelete && removeBabysitter(babysitterToDelete.id)}
+              >
+                <ThemedText style={{ color: '#fff' }}>Delete</ThemedText>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
+
+      <ParallaxScrollView
       headerBackgroundColor={{ light: '#F8D9FF', dark: '#3C1A4B' }}
       headerImage={
         <Image
@@ -270,6 +313,7 @@ export default function BabysitterManagerScreen() {
         )}
       </KeyboardAvoidingView>
     </ParallaxScrollView>
+    </>
   );
 }
 
@@ -412,5 +456,40 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: 24,
+  },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 20,
+  },
+  modalContent: {
+    backgroundColor: '#FFE4FA',
+    borderRadius: 14,
+    padding: 20,
+    width: '90%',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  modalTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#8B2D8B',
+    marginBottom: 16,
+    textAlign: 'center',
+  },
+  modalText: {
+    fontSize: 16,
+    marginBottom: 20,
+    textAlign: 'center',
+    color: '#000000',
+  },
+  modalButtons: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
   },
 });
