@@ -251,7 +251,12 @@ export default function BabysitterManagerScreen() {
         
         {babysitters.length === 0 ? (
           <ThemedView style={styles.emptyState}>
-            <ThemedText style={{ textAlign: 'center' }}>
+            <ThemedText style={{ 
+              textAlign: 'center',
+              color: '#000000',
+              fontSize: 16,
+              fontWeight: 'bold'
+            }}>
               No babysitters yet. Add your first babysitter above!
             </ThemedText>
           </ThemedView>

@@ -57,7 +57,7 @@ export default function HomeScreen() {
     };
     
     loadBabysitters();
-  }, []);
+  }, [babysitterDropdownOpen]); // Reload when dropdown opens
 
   // Helper to format to HH:MM AM/PM
   const formatTime = (date: Date) => {
@@ -206,8 +206,8 @@ export default function HomeScreen() {
         >
           {!selectedBabysitter && (
             <ThemedText style={{
-              color: '#333333',
-              fontSize: 18,
+              color: '#000000',
+              fontSize: 20,
               fontWeight: 'bold',
             }}>
               Select Babysitter
@@ -215,8 +215,8 @@ export default function HomeScreen() {
           )}
           {selectedBabysitter && (
             <ThemedText style={{
-              color: '#8B2D8B',
-              fontSize: 18,
+              color: '#000000',
+              fontSize: 20,
               fontWeight: 'bold',
             }}>
               {selectedBabysitter.firstName} {selectedBabysitter.lastName} (${selectedBabysitter.rate}/hr)
@@ -226,7 +226,7 @@ export default function HomeScreen() {
         
         {babysitterDropdownOpen && (
           <View style={styles.dropdown}>
-            <ScrollView style={{ maxHeight: 200 }}>
+            <ScrollView style={{ maxHeight: 300 }}>
               {babysitters.map(babysitter => (
                 <TouchableOpacity 
                   key={babysitter.id}
@@ -241,7 +241,11 @@ export default function HomeScreen() {
                     setBabysitterDropdownOpen(false);
                   }}
                 >
-                  <ThemedText>
+                  <ThemedText style={{
+                    color: '#000000',
+                    fontSize: 18,
+                    fontWeight: 'bold'
+                  }}>
                     {babysitter.firstName} {babysitter.lastName} (${babysitter.rate}/hr)
                   </ThemedText>
                 </TouchableOpacity>
@@ -252,7 +256,8 @@ export default function HomeScreen() {
       </View>
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-        style={{ flex: 1 }}
+        style={{ flex: 1, zIndex: 1 }}
+        keyboardVerticalOffset={100}
       >
         <FlatList
           ref={flatListRef}
@@ -503,7 +508,8 @@ const styles = StyleSheet.create({
   babysitterSelector: {
     marginBottom: 16,
     width: '100%',
-    zIndex: 1000,
+    zIndex: 9999,
+    position: 'relative',
   },
   babysitterDropdown: {
     padding: 16,
@@ -532,15 +538,16 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#C38DFF',
     borderRadius: 8,
-    zIndex: 1000,
-    elevation: 5,
+    zIndex: 9999,
+    elevation: 10,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
+    maxHeight: 300,
   },
   dropdownItem: {
-    padding: 12,
+    padding: 16,
     borderBottomWidth: 1,
     borderBottomColor: '#f0f0f0',
   },
