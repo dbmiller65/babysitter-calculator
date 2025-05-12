@@ -1,13 +1,13 @@
 // hero.png is required in assets for splash/header.
 import React, { useState, useRef, useEffect } from 'react';
-import { View, TextInput, TouchableOpacity, FlatList, KeyboardAvoidingView, Platform, StyleSheet, Modal, Text, LogBox } from 'react-native';
+import { View, TextInput, TouchableOpacity, FlatList, KeyboardAvoidingView, Platform, StyleSheet, Text, LogBox, ScrollView } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { Image } from 'expo-image';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { HelloWave } from '@/components/HelloWave';
-import BabysitterManager from '@/components/BabysitterManager';
 
 interface Babysitter {
   id: string;
@@ -32,15 +32,32 @@ LogBox.ignoreLogs([
 
 export default function HomeScreen() {
   const [rows, setRows] = useState<SessionRow[]>([
-    { id: '1', babysitterId: undefined, start: '', stop: '', rate: '' },
+    { id: '1', start: '', stop: '', rate: '' },
   ]);
   const [gasTip, setGasTip] = useState('');
   const [babysitters, setBabysitters] = useState<Babysitter[]>([]);
-  const [modalVisible, setModalVisible] = useState(false);
+  const [selectedBabysitter, setSelectedBabysitter] = useState<Babysitter | null>(null);
   const [timePicker, setTimePicker] = useState<{ rowId: string; field: 'start' | 'stop' } | null>(null);
   const [pickerValue, setPickerValue] = useState<Date>(new Date());
   const [pendingValue, setPendingValue] = useState<Date | null>(null);
+  const [babysitterDropdownOpen, setBabysitterDropdownOpen] = useState(false);
   const flatListRef = useRef<FlatList>(null);
+  
+  // Load babysitters from AsyncStorage
+  useEffect(() => {
+    const loadBabysitters = async () => {
+      try {
+        const data = await AsyncStorage.getItem('babysitter-calculator-babysitters');
+        if (data) {
+          setBabysitters(JSON.parse(data));
+        }
+      } catch (error) {
+        console.error('Error loading babysitters:', error);
+      }
+    };
+    
+    loadBabysitters();
+  }, []);
 
   // Helper to format to HH:MM AM/PM
   const formatTime = (date: Date) => {
@@ -114,7 +131,7 @@ export default function HomeScreen() {
   const addRow = () => {
     setRows(prev => [
       ...prev,
-      { id: (prev.length + 1).toString(), start: '', stop: '', rate: '' },
+      { id: (prev.length + 1).toString(), start: '', stop: '', rate: selectedBabysitter?.rate || '' },
     ]);
   };
 
@@ -168,22 +185,71 @@ export default function HomeScreen() {
       <ThemedView style={styles.titleContainer}>
         <HelloWave />
         <ThemedText type="title" style={{ marginLeft: 8 }}>Babysitter Calculator</ThemedText>
-        <TouchableOpacity onPress={() => setModalVisible(true)} style={styles.manageBtn}>
-          <ThemedText style={{ color: '#fff' }}>Manage Babysitters</ThemedText>
-        </TouchableOpacity>
       </ThemedView>
-      <Modal visible={modalVisible} animationType="slide">
-        <BabysitterManager
-          babysitters={babysitters}
-          onSave={bs => {
-            setBabysitters(bs);
-            setModalVisible(false);
+      
+      {/* Babysitter selection dropdown */}
+      <View style={styles.babysitterSelector}>
+        <TouchableOpacity 
+          style={{
+            padding: 16,
+            borderRadius: 10,
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'center',
+            backgroundColor: selectedBabysitter ? '#FFFFFF' : '#C38DFF',
+            borderWidth: selectedBabysitter ? 1 : 0,
+            borderColor: '#C38DFF',
+            marginBottom: 16,
+            width: '100%',
           }}
-        />
-        <TouchableOpacity onPress={() => setModalVisible(false)} style={styles.closeBtn}>
-          <ThemedText style={{ color: '#fff' }}>Close</ThemedText>
+          onPress={() => setBabysitterDropdownOpen(!babysitterDropdownOpen)}
+        >
+          {!selectedBabysitter && (
+            <ThemedText style={{
+              color: '#333333',
+              fontSize: 18,
+              fontWeight: 'bold',
+            }}>
+              Select Babysitter
+            </ThemedText>
+          )}
+          {selectedBabysitter && (
+            <ThemedText style={{
+              color: '#8B2D8B',
+              fontSize: 18,
+              fontWeight: 'bold',
+            }}>
+              {selectedBabysitter.firstName} {selectedBabysitter.lastName} (${selectedBabysitter.rate}/hr)
+            </ThemedText>
+          )}
         </TouchableOpacity>
-      </Modal>
+        
+        {babysitterDropdownOpen && (
+          <View style={styles.dropdown}>
+            <ScrollView style={{ maxHeight: 200 }}>
+              {babysitters.map(babysitter => (
+                <TouchableOpacity 
+                  key={babysitter.id}
+                  style={styles.dropdownItem}
+                  onPress={() => {
+                    setSelectedBabysitter(babysitter);
+                    // Update all rows with the new rate
+                    setRows(prev => prev.map(row => ({
+                      ...row,
+                      rate: babysitter.rate
+                    })));
+                    setBabysitterDropdownOpen(false);
+                  }}
+                >
+                  <ThemedText>
+                    {babysitter.firstName} {babysitter.lastName} (${babysitter.rate}/hr)
+                  </ThemedText>
+                </TouchableOpacity>
+              ))}
+            </ScrollView>
+          </View>
+        )}
+      </View>
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
         style={{ flex: 1 }}
@@ -223,7 +289,7 @@ export default function HomeScreen() {
                     item.stop && item.start && parseTime(item.stop) !== null && parseTime(item.start) !== null && parseTime(item.stop)! <= parseTime(item.start)! ? styles.cardError : null
                   ]}
                 >
-                  {/* Babysitter selection dropdown will go here in next step */}
+                  <ThemedText type="defaultSemiBold" style={styles.cardTitle}>Time {index + 1}</ThemedText>
                   <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: '100%' }}>
                     <View style={{ flex: 1 }}>
                       <TouchableOpacity style={{ width: '100%' }} onPress={() => openPicker(item.id, 'start', index)}>
@@ -271,15 +337,16 @@ export default function HomeScreen() {
                 <ThemedText type="defaultSemiBold" style={{ color: '#fff' }}>+ Add Row</ThemedText>
               </TouchableOpacity>
               <View style={styles.gasTipCard}>
-                <TextInput
-                  style={styles.input}
-                  placeholder="Gas/Tip ($)"
-                  placeholderTextColor="#333"
-                  value={gasTip}
-                  onChangeText={setGasTip}
-                  keyboardType="decimal-pad"
-                />
-                <View style={{ flex: 1, alignItems: 'flex-end' }}>
+                <ThemedText type="defaultSemiBold" style={styles.cardTitle}>Gas/Tip</ThemedText>
+                <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+                  <TextInput
+                    style={[styles.input, { flex: 1, marginRight: 10 }]}
+                    placeholder="Gas/Tip ($)"
+                    placeholderTextColor="#333"
+                    value={gasTip}
+                    onChangeText={setGasTip}
+                    keyboardType="decimal-pad"
+                  />
                   <ThemedText type="defaultSemiBold" style={styles.rowTotal}>
                     ${parseFloat(gasTip || '0').toFixed(2)}
                   </ThemedText>
@@ -368,7 +435,7 @@ const styles = StyleSheet.create({
     alignItems: 'stretch',
     backgroundColor: '#FFE4FA',
     borderRadius: 14,
-    padding: 10,
+    padding: 16,
     marginBottom: 10,
     shadowColor: '#C38DFF',
     shadowOffset: { width: 0, height: 2 },
@@ -376,6 +443,11 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 3,
     width: '100%',
+  },
+  cardTitle: {
+    color: '#8B2D8B',
+    fontSize: 18,
+    marginBottom: 10,
   },
   input: {
     flex: 1,
@@ -403,12 +475,10 @@ const styles = StyleSheet.create({
     marginVertical: 10,
   },
   gasTipCard: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
+    flexDirection: 'column',
     backgroundColor: '#FFE4FA',
     borderRadius: 14,
-    padding: 10,
+    padding: 16,
     marginBottom: 12,
     shadowColor: '#C38DFF',
     shadowOffset: { width: 0, height: 2 },
@@ -429,6 +499,50 @@ const styles = StyleSheet.create({
     padding: 6,
     borderRadius: 6,
     backgroundColor: '#F8D9FF',
+  },
+  babysitterSelector: {
+    marginBottom: 16,
+    width: '100%',
+    zIndex: 1000,
+  },
+  babysitterDropdown: {
+    padding: 16,
+    borderRadius: 10,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderColor: '#C38DFF',
+  },
+  babysitterDropdownText: {
+    color: '#fff',
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  selectedBabysitterText: {
+    color: '#8B2D8B',
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  dropdown: {
+    position: 'absolute',
+    top: '100%',
+    left: 0,
+    right: 0,
+    backgroundColor: '#fff',
+    borderWidth: 1,
+    borderColor: '#C38DFF',
+    borderRadius: 8,
+    zIndex: 1000,
+    elevation: 5,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+  },
+  dropdownItem: {
+    padding: 12,
+    borderBottomWidth: 1,
+    borderBottomColor: '#f0f0f0',
   },
   manageBtn: {
     backgroundColor: '#C38DFF',

@@ -22,6 +22,7 @@
 - The stop time must be later than the begin time. The app must not allow negative or overnight hour calculations unless explicitly intended.
 - There must be a Manage Babysitter page, accessible via an icon at the bottom of the app.
 - The user must be able to add, modify, and delete babysitters, with fields: First Name, Last Name, Mobile, and Rate.
+- Babysitter mobile numbers must be clickable to allow the user to call the babysitter directly.
 - On the home page, the user must select a babysitter before filling in times.
 - When a babysitter is selected, their default rate should auto-fill all rate fields (but remain user-editable).
 - The hero/splash image must use the user-supplied hero.png (not the default atomic/react logo)
