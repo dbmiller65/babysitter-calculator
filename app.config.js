@@ -1,0 +1,59 @@
+module.exports = {
+  expo: {
+    name: "Babysitter Calculator",
+    slug: "babysitter-calculator",
+    version: "1.0.0",
+    orientation: "portrait",
+    icon: "./assets/images/icon.png",
+    scheme: "babysittercalculator",
+    userInterfaceStyle: "automatic",
+    newArchEnabled: true,
+    description: "Calculate babysitting fees with ease. Track time, rates, and manage your babysitters all in one place.",
+    ios: {
+      supportsTablet: true,
+      bundleIdentifier: "com.babysittercalculator.app",
+      buildNumber: "1",
+      infoPlist: {
+        UIBackgroundModes: ["fetch"],
+        NSPhotoLibraryUsageDescription: "This app does not require access to the photo library.",
+        NSCameraUsageDescription: "This app does not require access to the camera.",
+        NSMicrophoneUsageDescription: "This app does not require access to the microphone."
+      }
+    },
+    android: {
+      adaptiveIcon: {
+        foregroundImage: "./assets/images/adaptive-icon.png",
+        backgroundColor: "#C38DFF"
+      },
+      package: "com.babysittercalculator.app",
+      versionCode: 1,
+      permissions: [],
+      edgeToEdgeEnabled: true
+    },
+    web: {
+      bundler: "metro",
+      output: "static",
+      favicon: "./assets/images/favicon.png"
+    },
+    plugins: [
+      "expo-router"
+    ],
+    splash: {
+      image: "./assets/hero.png",
+      resizeMode: "contain",
+      backgroundColor: "#C38DFF"
+    },
+    experiments: {
+      typedRoutes: true
+    },
+    extra: {
+      router: {
+        origin: false
+      },
+      eas: {
+        projectId: "babysitter-calculator"
+      }
+    },
+    owner: "dbmiller65"
+  }
+};
