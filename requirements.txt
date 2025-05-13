@@ -21,7 +21,7 @@
 - The spinner (time picker) shall always be visible on its Set/Cancel card (never hidden or occluded), and its font/background must ensure the time is always visible and readable (never white-on-white or otherwise invisible)
 - The stop time must be later than the begin time. The app must not allow negative or overnight hour calculations unless explicitly intended.
 - There must be a Manage Babysitter page, accessible via an icon at the bottom of the app.
-- The user must be able to add, modify, and delete babysitters, with fields: First Name, Last Name, Mobile, and Rate.
+- The user must be able to add, modify, and delete babysitters, with fields: First Name, Last Name, Mobile, and Rate. No field is required - the user can save a babysitter with any single field filled in.
 - Babysitter mobile numbers must be clickable to allow the user to call the babysitter directly.
 - On the home page, the user must select a babysitter before filling in times.
 - When a babysitter is selected, their default rate should auto-fill all rate fields (but remain user-editable).

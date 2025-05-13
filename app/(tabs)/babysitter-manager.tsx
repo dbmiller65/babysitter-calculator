@@ -58,7 +58,10 @@ export default function BabysitterManagerScreen() {
   }, [babysitters]);
 
   const addBabysitter = () => {
-    if (!newFirstName.trim() || !newLastName.trim() || !newRate.trim()) return;
+    // Check if at least one field has content
+    if (!newFirstName.trim() && !newLastName.trim() && !newMobile.trim() && !newRate.trim()) {
+      return; // Don't add if all fields are empty
+    }
     
     setBabysitters(prev => [
       ...prev,
