@@ -12,7 +12,7 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.babysittercalculator.app",
-      "buildNumber": "1",
+      "buildNumber": "3",
       "infoPlist": {
         "UIBackgroundModes": [
           "fetch"
@@ -28,7 +28,7 @@
         "backgroundColor": "#C38DFF"
       },
       "package": "com.babysittercalculator.app",
-      "versionCode": 1,
+      "versionCode": 3,
       "permissions": [],
       "edgeToEdgeEnabled": true
     },

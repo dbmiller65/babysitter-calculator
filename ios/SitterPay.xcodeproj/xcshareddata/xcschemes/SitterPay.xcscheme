@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-               BuildableName = "BabysitterCalculator.app"
-               BlueprintName = "BabysitterCalculator"
-               ReferencedContainer = "container:BabysitterCalculator.xcodeproj">
+               BuildableName = "SitterPay.app"
+               BlueprintName = "SitterPay"
+               ReferencedContainer = "container:SitterPay.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -33,9 +33,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "00E356ED1AD99517003FC87E"
-               BuildableName = "BabysitterCalculatorTests.xctest"
-               BlueprintName = "BabysitterCalculatorTests"
-               ReferencedContainer = "container:BabysitterCalculator.xcodeproj">
+               BuildableName = "SitterPayTests.xctest"
+               BlueprintName = "SitterPayTests"
+               ReferencedContainer = "container:SitterPay.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -55,9 +55,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "BabysitterCalculator.app"
-            BlueprintName = "BabysitterCalculator"
-            ReferencedContainer = "container:BabysitterCalculator.xcodeproj">
+            BuildableName = "SitterPay.app"
+            BlueprintName = "SitterPay"
+            ReferencedContainer = "container:SitterPay.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -72,9 +72,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "BabysitterCalculator.app"
-            BlueprintName = "BabysitterCalculator"
-            ReferencedContainer = "container:BabysitterCalculator.xcodeproj">
+            BuildableName = "SitterPay.app"
+            BlueprintName = "SitterPay"
+            ReferencedContainer = "container:SitterPay.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

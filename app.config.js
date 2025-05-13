@@ -12,7 +12,7 @@ module.exports = {
     ios: {
       supportsTablet: true,
       bundleIdentifier: "com.babysittercalculator.app",
-      buildNumber: "1",
+      buildNumber: "3",
       infoPlist: {
         UIBackgroundModes: ["fetch"],
         NSPhotoLibraryUsageDescription: "This app does not require access to the photo library.",
@@ -26,7 +26,7 @@ module.exports = {
         backgroundColor: "#C38DFF"
       },
       package: "com.babysittercalculator.app",
-      versionCode: 1,
+      versionCode: 3,
       permissions: [],
       edgeToEdgeEnabled: true
     },

@@ -10,6 +10,9 @@
     "preview": {
       "distribution": "internal"
     },
-    "production": {}
+    "production": {
+      "autoIncrement": false,
+      "distribution": "store"
+    }
   }
 }
