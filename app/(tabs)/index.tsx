@@ -184,7 +184,7 @@ export default function HomeScreen() {
       }>
       <ThemedView style={styles.titleContainer}>
         <HelloWave />
-        <ThemedText type="title" style={{ marginLeft: 16 }}>Babysitter Calculator</ThemedText>
+        <ThemedText type="title" style={{ marginLeft: 16 }}>SitterPay</ThemedText>
       </ThemedView>
       
       {/* Babysitter selection dropdown */}

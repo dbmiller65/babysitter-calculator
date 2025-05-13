@@ -249,7 +249,7 @@ export default function BabysitterManagerScreen() {
       }>
       <ThemedView style={styles.titleContainer}>
         <HelloWave />
-        <ThemedText type="title" style={{ marginLeft: 8 }}>Manage Babysitters</ThemedText>
+        <ThemedText type="title" style={{ marginLeft: 8 }}>SitterPay</ThemedText>
       </ThemedView>
       
       <KeyboardAvoidingView
