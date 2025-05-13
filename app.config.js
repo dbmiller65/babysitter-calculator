@@ -1,6 +1,6 @@
 module.exports = {
   expo: {
-    name: "Babysitter Calculator",
+    name: "SitterPay",
     slug: "babysitter-calculator",
     version: "1.0.0",
     orientation: "portrait",
